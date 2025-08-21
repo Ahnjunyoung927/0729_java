@@ -5,12 +5,16 @@ import java.util.Scanner;
 
 import com.kh.idol.controller.IdolController;
 import com.kh.idol.model.Idol;
+import com.kh.idol.model.vo.Board;
+import com.kh.idol.model.vo.Fan;
 
 public class IdolView {
 	
 	// 필드부
 	private Scanner sc = new Scanner(System.in);
 	private IdolController ic = new IdolController();
+	// 로그인에 성공한 회원의 정보를 담아줄 필드
+	private Fan loginFan;
 	
 	// 생성자
 	
@@ -34,8 +38,8 @@ public class IdolView {
 			switch(menuNo) {
 			case 1 : infoMenu(); break;
 			case 2 : signUp(); break;
-			case 3 : break;
-			case 4 : break;
+			case 3 : login(); break;
+			case 4 : boardMenu(); break;
 			case 5 : break;
 			default : System.out.println("잘못된 메뉴를 선택하셨습니다.");
 			}
@@ -152,13 +156,91 @@ public class IdolView {
 		} else {
 			System.out.println("회원가입에 성공했습니다.");
 		}
-		
-		
 	}
 	
+	private void login() {
+		System.out.println("로그인 서비스입니다.");
+		
+		System.out.print("아이디를 입력해주세요 : ");
+		String userId = sc.nextLine();
+		System.out.print("비밀번호를 입력해주세요 : ");
+		String userPwd = sc.nextLine();
+		
+		Fan fan = ic.login(userId, userPwd);
+		
+		if(fan != null) {
+			System.out.println(fan.getNickName() + "님 환영합니다.");
+			System.out.println();
+			loginFan = fan; // 얕은 복사, 같은 주소를 가리킴
+		} else {
+			System.out.println("로그인 실패, 아이디 또는 비밀번호를 확인해주세요.");
+		}
+	}
 	
+	private void boardMenu() {
+		
+		while(true) {
+			System.out.println("에스파 게시판입니다.");
+			System.out.println("이용하실 메뉴를 선택해주세요.");
+			System.out.println("1. 게시글 작성");
+			System.out.println("2. 게시글 전체 조회");
+			System.out.println("3. 게시글 상세 조회");
+			System.out.println("4. 메인메뉴로 돌아가기");
+			System.out.print("메뉴입력 : ");
+			int menuNo = sc.nextInt();
+			sc.nextLine();
+		
+			switch(menuNo) {
+			case 1 : post(); break;
+			case 2 : selectBoardList(); break;
+			case 3 : break;
+			case 4 : return;
+			}
+		}
+	}
 	
+	private void post() {
+		System.out.println("게시글 작성 서비스입니다.");
+		// 전제조건 : 로그인한 사용자만 게시글을 작성할 수 있음
+		// 1. 변수?
+		// 2. if?
+		// 3. for?
+		
+		if(loginFan != null) {
+			System.out.print("게시글 제목을 입력해주세요 : ");
+			String boardTitle = sc.nextLine();
+			System.out.print("게시글 내용을 입력해주세요 : ");
+			String boardContent = sc.nextLine();
+			
+			ic.post(boardTitle, boardContent, loginFan.getUserId());
+			
+			System.out.println("게시글 작성 성공");
+		} else {
+			System.out.println("로그인 후 이용 가능한 서비스입니다.");
+		}
+	}
 	
+	public void selectBoardList() {
+		System.out.println();
+		System.out.println("전체 게시글 목록입니다.");
+		System.out.println();
+		
+		List<Board> boardList = ic.selectBoardList();
+		
+		if(boardList.isEmpty()) {
+			System.out.println("게시글이 아직 존재하지 않습니다.");
+			System.out.println();
+			System.out.println("첫 게시글의 주인공이 되어보세요.");
+		} else {
+			for(Board board : boardList) {
+				System.out.println("글 번호 : " + board.getBoardNo() + "\t");
+				System.out.println("글 제목 : " + board.getBoardTitle() + "\t");
+				System.out.println("작성자 : " + board.getUserId() + "\t");
+				System.out.println("작성일 : " + board.getCreateDate());
+				System.out.println();
+			}
+		}
+	}
 	
 	
 }
