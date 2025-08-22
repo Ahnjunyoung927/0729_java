@@ -12,11 +12,18 @@ public class BookController {
 	public BookController() {
 	}
 	
+	{
+		list.add(new Book("자바의 정석", "남궁 성", "기타", 20000));
+		list.add(new Book("쉽게 배우는 알고리즘", "문병로", "기타", 15000));
+		list.add(new Book("대화의 기술", "강보람", "인문", 17500));
+		list.add(new Book("암정복기", "박신우", "의료", 20000));
+	}
+	
 	public void insertBook(Book bk) {
 		list.add(bk);
 	}
 	
-	public List selectList() {
+	public List<Book> selectList() {
 		return list;
 	}
 	
