@@ -48,14 +48,7 @@ public class MusicView {
 			default : System.out.println("올바른 번호를 입력해주세요."); continue;
 			}
 			
-			
-			
-			
-			
 		}
-		
-		
-		
 		
 	}
 	
@@ -160,6 +153,7 @@ public class MusicView {
 		String newTitle = sc.nextLine();
 		System.out.print("수정할 가수 명 : ");
 		String newSinger = sc.nextLine();
+		System.out.println();
 		
 		Music music = mc.setMusic(title, singer, newTitle, newSinger);
 		
